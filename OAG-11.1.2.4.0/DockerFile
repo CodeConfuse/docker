@@ -1,0 +1,16 @@
+FROM oraclelinux:7
+
+MAINTAINER Anshul Mittal <anshul.mittal@prosense.co.in>
+
+ENV OAG_HOME=/u01/oracle/product/OAG-11.1.2.4.0 SCRATCH=/tmp/scratch ORACLE_GROUP=oinstall ORACLE_USER=oracle
+    
+ADD OAG-11.1.2.4.0-linux-x64-installer.run /u01/softwares/
+
+RUN yum update -y -q && \
+	mkdir -p ${OAG_HOME} && \
+	useradd -b /u01 -M -s /bin/bash ${ORACLE_USER} && \
+	groupadd -g 1001 ${ORACLE_GROUP} && usermod -a -G ${ORACLE_GROUP} ${ORACLE_USER} && \
+	chown -R ${ORACLE_USER}:${ORACLE_GROUP} ${OAG_HOME} && \
+	su -c  "cd /u01/softwares && ./OAG-11.1.2.4.0-linux-x64-installer.run --mode unattended --enable-components apigateway,policystudio --disable-components analytics,configurationstudio,apitester --prefix ${OAG_HOME} --username admin --adminpasswd Oracle123 --changeCredentials 1 --firstInNewDomain 1 --rnmUsername admin --rnmPassword Oracle123 --remoteNodeManagerCred 1 --configureGatewayQuestion 1 --gwName Gateway1 --gwGroup Group1" - oracle && \
+    rm -rf /u01/softwares
+
