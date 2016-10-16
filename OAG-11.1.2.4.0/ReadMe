@@ -9,9 +9,13 @@ https://edelivery.oracle.com
 
 unzip the downoaded file and place the "OAG-11.1.2.4.0-linux-x64-installer.run" file in same directory where docker file is store.
 
+-------------Build OAG Docker Image ---------------------------
+
+docker build -t oracle/oag:12.1.2.4.0 -f ./DockerFile .
+
 -------------How to start container and OAG server-------------
 
-docker run -d -p 9090:8090 --user=oracle -e "DISPLAY=localhost:0.0" --name=OAG --shm-size=2g -t prosense/oag:12.1.2.4.0
+docker run -d -p 9090:8090 --user=oracle -e "DISPLAY=localhost:0.0" --name=OAG --shm-size=2g -t oracle/oag:12.1.2.4.0
 
 docker exec -it OAG /u01/oracle/product/OAG-11.1.2.4.0/apigateway/posix/bin/nodemanager &
 
